@@ -1,0 +1,10 @@
+package backend.kb_hack.global.common.exception.type;
+
+import backend.kb_hack.global.common.exception.enums.BadStatusCode;
+
+public class UnAuthorizedException extends CustomException {
+    public UnAuthorizedException(BadStatusCode badStatusCode) {
+        super(badStatusCode);
+    }
+}
+

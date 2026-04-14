@@ -1,0 +1,61 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '3.5.13'
+	id 'io.spring.dependency-management' version '1.1.7'
+}
+
+group = 'backend'
+version = '0.0.1-SNAPSHOT'
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(17)
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	//웹 개발을 위한 기본 스타터
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+	testCompileOnly 'org.projectlombok:lombok'
+	testAnnotationProcessor 'org.projectlombok:lombok'
+
+	//MyBatis 연동을 위한 스타터
+	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.3'
+
+	//H2
+	runtimeOnly 'com.h2database:h2'
+
+	//MySQL 데이터베이스 드라이버
+	runtimeOnly 'com.mysql:mysql-connector-j'
+
+	//Redis (Spring Data Redis + Lettuce)
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
+	//이메일
+	implementation 'org.springframework.boot:spring-boot-starter-mail'
+
+	//타임리프
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+
+	//마이바티스 테스트
+	testImplementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter-test:3.0.3'
+
+	//시큐리티
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
+	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}

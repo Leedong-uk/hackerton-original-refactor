@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="backend.kb_hack.domain.favorite.mapper.FavoriteMapper">
+
+
+    <select id="findFavoritesByMemberId" resultType="backend.kb_hack.domain.favorite.dto.FavoriteResponseDto">
+        SELECT a.announce_id,
+               a.title,
+               a.reqst_end_date,
+
+               (SELECT COUNT(*)
+                FROM document d
+                WHERE d.announce_id = a.announce_id) AS total_docs,
+
+               (SELECT COUNT(*) FROM member_document_check mdc
+                   JOIN document d2 ON mdc.document_id = d2.document_id
+                   WHERE d2.announce_id = a.announce_id
+                     AND mdc.member_id = f.member_id
+                     AND mdc.checked= true
+               )AS checked_docs
+
+        FROM member_favorite f
+                 JOIN announce a ON f.announce_id = a.announce_id
+        WHERE f.member_id = #{memberId}
+        ORDER BY a.created_date DESC
+
+    </select>
+</mapper>
