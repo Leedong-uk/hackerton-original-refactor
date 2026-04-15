@@ -2,8 +2,36 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="backend.kb_hack.domain.announce.mapper.AnnounceMapper">
 
+    <update id="increaseViewNum" parameterType="long" >
+        UPDATE announce
+        SET view_num = view_num + 1
+        WHERE announce_id = #{announceId}
+    </update>
+
 
     <select id="findAll" resultType="backend.kb_hack.domain.announce.dto.Announce">
-        SELECT * FROM announce;
+        SELECT * FROM announce
+    </select>
+
+    <select id="findTopAnnounces" resultType="backend.kb_hack.domain.announce.dto.AnnounceRankingDTO">
+        SELECT announce_id, title, view_num
+        FROM announce
+        ORDER BY view_num DESC
+            LIMIT #{limit}
+    </select>
+
+    <select id="findByAnnounceId" resultType="backend.kb_hack.domain.announce.dto.AnnounceRankingDTO">
+        SELECT announce_id, title, view_num
+        FROM announce
+        WHERE announce_id = #{announceId}
+    </select>
+
+    <select id="findById" resultType="backend.kb_hack.domain.announce.dto.Announce">
+        SELECT announce_id, title, author, exc_instt_nm, description,
+               lcategory, pub_date, reqst_start_date, reqst_end_date,
+               target_name, view_num, file_path, file_name,
+               how_to_register, call_company, print_file_name, print_file_path
+        FROM announce
+        WHERE announce_id = #{announceId}
     </select>
 </mapper>

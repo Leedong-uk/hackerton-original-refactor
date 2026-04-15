@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="backend.kb_hack.domain.document.mapper.DocumentMapper">
+
+
+    <select id="findDocumentsByMemberAndAnnounce" resultType="backend.kb_hack.domain.document.dto.DocumentResponseDto">
+        SELECT
+            d.document_id,
+            d.announce_id,
+            d.title,
+            d.description,
+            COALESCE(mdc.checked, false) AS checked,
+            a.title AS announce_title,
+            a.reqst_start_date,
+            a.reqst_end_date,
+            a.pub_date,
+            (SELECT COUNT(*)
+             FROM document d2
+             WHERE d2.announce_id = d.announce_id) AS total_docs,
+            (SELECT COUNT(*)
+             FROM member_document_check mdc2
+                      JOIN document d3 ON mdc2.document_id = d3.document_id
+             WHERE d3.announce_id = d.announce_id
+               AND mdc2.member_id = #{memberId}
+               AND mdc2.checked = true) AS checked_docs
+        FROM document d
+                 JOIN announce a ON d.announce_id = a.announce_id
+                 LEFT JOIN member_document_check mdc
+                           ON d.document_id = mdc.document_id
+                               AND mdc.member_id = #{memberId}
+        WHERE d.announce_id = #{announceId}
+    </select>
+</mapper>
