@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="backend.kb_hack.domain.business.mapper.BusinessMapper">
+
+    <insert id="insertBusiness" parameterType="backend.kb_hack.domain.business.dto.BusinessDTO"
+            useGeneratedKeys="true" keyProperty="businessId">
+        INSERT INTO
+            business (business_code,name,business_addr,business_addr_detail,business_number,business_open_date,member_id)
+        VALUES
+            (#{businessCodeId},#{name},#{businessAddr},#{businessAddrDetail},#{businessNumber},#{businessOpenDate},#{memberId})
+    </insert>
+
+    <update id="updateBusiness">
+        UPDATE business
+        SET business_number = #{dto.businessNumber},
+            name = #{dto.businessNm},
+            business_open_date = #{dto.businessOpenDate},
+            business_addr = #{dto.businessAddr},
+            business_addr_detail = #{dto.businessAddrDetail},
+            business_code = #{dto.businessCodeId}
+        WHERE business_id = #{businessId}
+    </update>
+
+    <select id="findBusinessCodeIdByMinorname" resultType="java.lang.Long">
+        SELECT business_code_id
+        FROM business_code
+        WHERE minor_name = #{minorName}
+    </select>
+
+    <select id="findMinorNameByBusinessId" resultType="java.lang.String">
+        SELECT bc.minor_name
+        FROM business b LEFT JOIN business_code bc
+            ON b.business_code = bc.business_code_id
+        WHERE b.business_id = #{businessId}
+    </select>
+
+    <select id="findBusinessAndClassInfoByMemberId" resultType="backend.kb_hack.domain.business.BusinessPlus">
+        SELECT
+            b.business_id,
+            b.business_code AS business_code_id,
+            b.name,
+            b.business_addr,
+            b.business_addr_detail,
+            b.business_number,
+            b.business_open_date,
+            bc.major_name           AS business_code_major_name,
+            bc.middle_name          AS business_code_middle_name,
+            bc.minor_name           AS business_code_minor_name
+        FROM business b
+                 LEFT JOIN business_code bc ON b.business_code = bc.business_code_id
+        WHERE b.member_id = #{memberId}
+    </select>
+
+
+</mapper>
