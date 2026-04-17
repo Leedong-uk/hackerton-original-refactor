@@ -2,6 +2,17 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="backend.kb_hack.domain.favorite.mapper.FavoriteMapper">
 
+    <insert id="insertFavorite">
+        INSERT INTO member_favorite (announce_id, member_id)
+        VALUES (#{announceId}, #{memberId})
+    </insert>
+
+    <delete id="deleteFavorite">
+        DELETE FROM member_favorite
+        WHERE announce_id = #{announceId}
+          AND member_id = #{memberId}
+    </delete>
+
 
     <select id="findFavoritesByMemberId" resultType="backend.kb_hack.domain.favorite.dto.FavoriteResponseDto">
         SELECT a.announce_id,

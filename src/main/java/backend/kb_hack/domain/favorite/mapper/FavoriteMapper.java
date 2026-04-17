@@ -9,5 +9,6 @@ import java.util.List;
 @Mapper
 public interface FavoriteMapper {
     List<FavoriteResponseDto> findFavoritesByMemberId(@Param("memberId") Long memberId);
-
+    void insertFavorite(@Param("announceId") Long announceId, @Param("memberId") Long memberId);
+    void deleteFavorite(@Param("announceId") Long announceId, @Param("memberId") Long memberId);
 }

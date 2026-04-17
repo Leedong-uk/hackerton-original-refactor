@@ -30,4 +30,16 @@ public class FavoriteService {
         MemberVO vo = securityUser.getMemberVO();
         return vo.getMemberId();
     }
+
+    @Transactional
+    public void addFavorite(Long announceId) {
+        Long memberId = getLoginMemberId(); // 로그인한 회원 ID 가져오기
+        favoriteMapper.insertFavorite(announceId, memberId);
+    }
+
+    @Transactional
+    public void removeFavorite(Long announceId) {
+        Long memberId = getLoginMemberId();
+        favoriteMapper.deleteFavorite(announceId, memberId);
+    }
 }
