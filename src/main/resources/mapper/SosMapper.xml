@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="backend.kb_hack.domain.sos.mapper.SosMapper">
+
+    <insert id="insert" parameterType="backend.kb_hack.domain.sos.entity.Sos" useGeneratedKeys="true" keyProperty="sosId" keyColumn="sos_id">
+        INSERT INTO sos (member_id, title, type, content, expired_at, status)
+        VALUES (#{memberId}, #{title}, #{type}, #{content}, #{expiredAt}, #{status})
+    </insert>
+
+    <update id="hardDelete">
+        DELETE FROM sos
+        WHERE sos_id = #{sosId}
+    </update>
+
+    <update id="update" parameterType="backend.kb_hack.domain.sos.entity.Sos">
+        UPDATE sos
+        SET title      = #{title},
+            type       = #{type},
+            content    = #{content},
+            expired_at = #{expiredAt}
+        WHERE sos_id = #{sosId}
+    </update>
+
+    <select id="findByMemberId" resultType="backend.kb_hack.domain.sos.entity.Sos">
+        SELECT
+            sos_id,
+            member_id,
+            title,
+            type,
+            content,
+            expired_at,
+            status,
+            created_date
+        FROM sos
+        WHERE member_id = #{memberId}
+        ORDER BY created_date DESC
+    </select>
+
+    <select id="findAll" resultType="backend.kb_hack.domain.sos.dto.SosListResponse">
+        SELECT
+            s.sos_id,
+            s.member_id,
+            b.name           AS business_name,
+            s.title          AS sos_title,
+            s.type           AS sos_type,
+            s.created_date   AS created_at,
+            s.expired_at,
+            b.business_addr,
+            b.business_addr_detail,
+            i.storage_key    AS profile_image
+        FROM sos s
+                 LEFT JOIN member m ON s.member_id = m.member_id
+                 LEFT JOIN business b ON b.member_id = m.member_id
+                 LEFT JOIN profile_image i ON i.member_id = m.member_id
+        WHERE s.status = 'ACTIVE'
+          AND s.expired_at > NOW()
+        ORDER BY s.created_date DESC
+    </select>
+
+    <select id="findDetail" resultType="backend.kb_hack.domain.sos.dto.SosDetailRow">
+        SELECT
+            s.sos_id,
+            b.name              AS business_name,
+            b.business_id,
+            m.badge,
+            b.business_addr,
+            b.business_addr_detail,
+            s.title             AS sos_title,
+            s.type              AS sos_type,
+            s.content           AS sos_content,
+            s.expired_at,
+            s.created_date      AS created_at,
+            si.sos_image_id,
+            si.storage_key      AS image_key,
+            i.storage_key       AS profile_image
+        FROM sos s
+                 JOIN member m ON s.member_id = m.member_id
+                 JOIN business b ON b.member_id = m.member_id
+                 LEFT JOIN sos_image si ON si.sos_id = s.sos_id
+                 LEFT JOIN profile_image i ON i.member_id = m.member_id
+        WHERE s.sos_id = #{sosId}
+    </select>
+
+
+</mapper>
