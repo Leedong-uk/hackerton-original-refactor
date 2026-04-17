@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="backend.kb_hack.domain.festival.mapper.FestivalMapper">
+
+    <select id="findAll" resultType="backend.kb_hack.domain.festival.Festival">
+        SELECT
+            festival_id,
+            festival_title,
+            address,
+            detail_address,
+            event_start_date,
+            event_end_date,
+            first_image
+        FROM festival
+    </select>
+    <select id="findByFestivalId" resultType="backend.kb_hack.domain.festival.Festival">
+        SELECT
+            festival_id,
+            festival_title,
+            address,
+            detail_address,
+            mapx,
+            mapy,
+            event_start_date,
+            event_end_date,
+            first_image,
+            tel,
+            tel_name,
+            overview,
+            content_id
+        FROM festival
+        WHERE festival_id = #{festivalId}
+    </select>
+
+</mapper>
