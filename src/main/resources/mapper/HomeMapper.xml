@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="backend.kb_hack.domain.home.mapper.HomeMapper">
+
+    <select id="getRecentAnnounce" resultType="backend.kb_hack.domain.home.dto.RecentAnnounceDTO">
+        SELECT
+            announce_id,
+            title,
+            reqst_end_date
+        FROM announce
+        ORDER BY created_date DESC
+            LIMIT 3
+    </select>
+
+    <select id="getRecentFestival" resultType="backend.kb_hack.domain.home.dto.RecentFestivalDTO">
+        SELECT
+            festival_id,
+            title
+            FROM festival
+        ORDER BY created_date DESC
+            LIMIT 3
+    </select>
+
+    <select id="getRecentArticle" resultType="backend.kb_hack.domain.home.dto.RecentArticleDTO">
+        SELECT
+            article_id,
+            title,
+            url
+        FROM article
+        ORDER BY created_date DESC
+            LIMIT 3
+    </select>
+
+    <select id="getNotice" resultType="backend.kb_hack.domain.notice.dto.NoticeDTO">
+        SELECT
+            notice_id,
+            title
+        FROM notice
+        ORDER BY created_date DESC
+            LIMIT 3
+    </select>
+
+</mapper>
