@@ -5,6 +5,24 @@
 
 <mapper namespace="backend.kb_hack.domain.document.mapper.DocumentMapper">
 
+    <select id="existsDocumentCheck" resultType="boolean">
+        SELECT COUNT(*) > 0
+        FROM member_document_check
+        WHERE document_id = #{documentId}
+          AND member_id = #{memberId}
+    </select>
+
+    <insert id="insertDocumentCheck">
+        INSERT INTO member_document_check (document_id, member_id, checked)
+        VALUES (#{documentId}, #{memberId}, #{checked})
+    </insert>
+
+    <update id="updateDocumentCheck">
+        UPDATE member_document_check
+        SET checked = #{checked}
+        WHERE document_id = #{documentId}
+          AND member_id = #{memberId}
+    </update>
 
     <select id="findDocumentsByMemberAndAnnounce" resultType="backend.kb_hack.domain.document.dto.DocumentResponseDto">
         SELECT
@@ -33,4 +51,33 @@
                                AND mdc.member_id = #{memberId}
         WHERE d.announce_id = #{announceId}
     </select>
+
+    <select id="findDocumentsByMemberId" resultType="backend.kb_hack.domain.document.dto.DocumentResponseDto">
+        SELECT
+            d.document_id,
+            d.announce_id,
+            d.title,
+            d.description,
+            COALESCE(mdc.checked, false) AS checked,
+            a.title                      AS announce_title,
+            a.reqst_end_date,
+            (SELECT COUNT(*)
+             FROM document d2
+             WHERE d2.announce_id = d.announce_id) AS total_docs,
+            (SELECT COUNT(*)
+             FROM member_document_check mdc2
+                      JOIN document d3 ON mdc2.document_id = d3.document_id
+             WHERE d3.announce_id = d.announce_id
+               AND mdc2.member_id = #{memberId}
+               AND mdc2.checked = true) AS checked_docs
+        FROM document d
+                 JOIN announce a ON d.announce_id = a.announce_id
+                 LEFT JOIN member_document_check mdc
+                           ON d.document_id = mdc.document_id
+                               AND mdc.member_id = #{memberId}
+        WHERE a.announce_id IN (
+            SELECT announce_id FROM member_favorite WHERE member_id = #{memberId}
+        )
+    </select>
+
 </mapper>

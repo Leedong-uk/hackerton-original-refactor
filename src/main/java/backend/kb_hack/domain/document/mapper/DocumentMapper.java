@@ -8,6 +8,9 @@ import java.util.List;
 
 @Mapper
 public interface DocumentMapper {
-    List<DocumentResponseDto> findDocumentsByMemberAndAnnounce( @Param("memberId") Long memberId, @Param("announceId") Long announceId);
-
+    boolean existsDocumentCheck(@Param("documentId") Long documentId, @Param("memberId") Long memberId);
+    void insertDocumentCheck(@Param("documentId") Long documentId, @Param("memberId") Long memberId, @Param("checked") boolean checked);
+    void updateDocumentCheck(@Param("documentId") Long documentId, @Param("memberId") Long memberId, @Param("checked") boolean checked);
+    List<DocumentResponseDto> findDocumentsByMemberAndAnnounce(@Param("announceId") Long announceId, @Param("memberId") Long memberId);
+    List<DocumentResponseDto> findDocumentsByMemberId(@Param("memberId") Long memberId);
 }
