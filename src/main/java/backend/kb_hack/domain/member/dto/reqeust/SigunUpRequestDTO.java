@@ -13,6 +13,7 @@ public class SigunUpRequestDTO {
     private String password;
     private String name;
     private String kakaoId;
+    private String profileImageKey;
     private String businessNumber;
     private String businessNm; // -> 이게 원래 table 상 name 인데
     private LocalDate businessOpenDate;

@@ -75,6 +75,7 @@ public class GlobalExceptionHandler {
     //500 에러 핸들러
     @ExceptionHandler(ServerErrorException.class)
     public ResponseEntity<BadResponse> handle500Error (ServerErrorException ex,HttpServletRequest request){
+        makeErrorLogs(ex, request);
         return ResponseEntity
                 .status(ex.getBadStatusCode().getHttpStatus())
                 .body(BadResponse.makeResponse(ex.getBadStatusCode()));

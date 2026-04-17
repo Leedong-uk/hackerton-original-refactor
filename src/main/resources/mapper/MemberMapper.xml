@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="backend.kb_hack.domain.member.mapper.MemberMapper">
+
+    <insert id="insertMember" parameterType="backend.kb_hack.domain.member.dto.MemberDTO"
+            useGeneratedKeys="true" keyProperty="memberId" keyColumn="member_id">
+        INSERT INTO member (email, password, name, kakao_id, status, help_count, badge, fcm_token)
+        VALUES (#{email}, #{password}, #{name}, #{kakaoId}, #{status}, #{helpCount}, #{badge}, #{fcmToken})
+    </insert>
+
+    <insert id="insertAuth" parameterType="backend.kb_hack.domain.member.dto.AuthDTO">
+        INSERT INTO auth (member_id, status)
+        VALUES (#{memberId}, #{auth})
+    </insert>
+
+</mapper>
